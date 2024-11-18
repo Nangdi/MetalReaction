@@ -2,40 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
-public class mineralInfo
+public class MineralInfo
 {
-    public int MeneralId { get; set; }
-    public string mineralName { get; set; }
-    public string symbol { get; set; }
+    public int MeneralId { get; private set; }
+    public string mineralName { get; private set; }
+    public string symbol { get; private set; }
 
-    public string offCode { get; set; }
+    public string offCode { get; private set; }
 
-    public mineralInfo(int num, string name ,string _symbor , string _offCode)
+    public MineralInfo(int num, string name, string _symbor)
     {
         MeneralId = num;
         mineralName = name;
         symbol = _symbor;
-        offCode = _offCode;
     }
 
 
 
 
-} 
+}
 
 
 public class FlameController : MonoBehaviour
 {
-    private Dictionary<string, mineralInfo> mineralDic;
+    private Dictionary<string, MineralInfo> mineralDic;
 
-    private mineralInfo currentMineral;
-    //{
-    //    set
-    //    {
-
-    //    }
-    //}
+    private MineralInfo currentMineral;
+   
     [SerializeField]
     private VisualEffect[] flames = new VisualEffect[8];
     private void Start()
@@ -43,22 +38,45 @@ public class FlameController : MonoBehaviour
         InitializeCommandActions();
         //AllStopEffect();
     }
-
+    private void Update()
+    {
+        //컨트롤러대신 키보드로 테스트하는 용의 코드
+        string receivedKey = GetPressedKey();
+        if (!string.IsNullOrEmpty(receivedKey))
+        {
+            ProcessReceivedData(receivedKey);
+        }
+    }
+    //키보드 테스트용
+    string GetPressedKey()
+    {
+        if (Input.GetKey(KeyCode.Alpha1)) return "80A";
+        if (Input.GetKey(KeyCode.Alpha2)) return "80C";
+        if (Input.GetKey(KeyCode.Alpha3)) return "80D";
+        if (Input.GetKey(KeyCode.Alpha4)) return "80E";
+        if (Input.GetKey(KeyCode.Alpha5)) return "80F";
+        if (Input.GetKey(KeyCode.Alpha6)) return "80G";
+        if (Input.GetKey(KeyCode.Alpha7)) return "80H";
+        if (Input.GetKey(KeyCode.Alpha8)) return "80B";
+        return ""; // 아무 키도 눌리지 않았을7때 반환할 기본 값
+    }
+    //바륨의 Flames 배열과 MineralInfo의 ID가 맨끝으로 가야함
     private void InitializeCommandActions()
     {
-        mineralDic = new Dictionary<string, mineralInfo>
-        {
-            { "80A", new mineralInfo(0 , "리튬" , "Li" ,"80I") },
-            { "80B", new mineralInfo(1 , "나트륨", "Na","80J")  },
-            { "80C", new mineralInfo(2 , "마그네슘", "Mg","80K")  },
-            { "80D", new mineralInfo(3 , "칼륨", "K","80L")  },
-            { "80E", new mineralInfo(4 , "칼슘", "Ca","80M")  },
-            { "80F", new mineralInfo(5 , "구리", "Cu","80N")  },
-            { "80G", new mineralInfo(6 , "스트론튬", "Sr","80O")  },
-            { "80H", new mineralInfo(7 , "바륨", "Ba","80P")  }
+        mineralDic = new Dictionary<string, MineralInfo>
+       {
+            { "80A", new MineralInfo(0 , "리튬" , "Li" ) },
+            { "80B", new MineralInfo(1 , "나트륨", "Na")  },
+            { "80C", new MineralInfo(2 , "칼륨", "K" ) },
+            { "80D", new MineralInfo(3 , "칼슘", "Ca")  },
+            { "80E", new MineralInfo(4 , "구리", "Cu")  },
+            { "80F", new MineralInfo(5 , "스트론튬", "Sr")  },
+            { "80G", new MineralInfo(6 , "바륨", "Ba")  },
+            { "80Z" , new MineralInfo(7 , "기본", "")  }
         };
-        
+
     }
+    
     private void AllStopEffect()
     {
         for (int i = 0; i < flames.Length; i++)
@@ -68,31 +86,44 @@ public class FlameController : MonoBehaviour
     }
     public void ProcessReceivedData(string data)
     {
+
         if (!mineralDic.ContainsKey(data))
         {
             Debug.Log("키 존재하지않음");
             return;
         }
-        if(currentMineral != null && currentMineral != mineralDic[data])
+        if(currentMineral != null)
         {
-            
-            ChangeFlame(data);
+            //이전 != 현재 
+            if(currentMineral.MeneralId != mineralDic[data].MeneralId)
+            {
+                //기존 켜져있던 불꽃 제거
+                string _previousLayer = currentMineral.symbol;
+                StopFlame(_previousLayer);
+            }
+            else
+            {
+                //이전과같은 불꽃일시 리턴
+                return;
+            }
         }
+       //현재광물 업데이트
         currentMineral = mineralDic[data];
-        flames[currentMineral.MeneralId].Play();
-        Debug.Log(currentMineral.offCode);
+        string _targetLayer = currentMineral.symbol;
+        PlayFlame(_targetLayer);
+       
         Debug.Log(currentMineral.mineralName);
-        //기존에 켜져있던 불꽃 끄기
-        //새로받은데이터에 맞는 불꽃 키기
     }
-    private void ChangeFlame(string data)
+    private void PlayFlame(string layer)
     {
-        SerialPortManager.Instance.SendData(currentMineral.offCode);
-        flames[currentMineral.MeneralId].Stop();
-    
-        //기존에있던 불꽃제거하고 새로운 불꽃 키기
-        //위치
-        //어떤오브젝트(불꽃)을 사용할지
+        Camera.main.cullingMask |= (1 << LayerMask.NameToLayer(layer));
+        Debug.Log($"{layer} 레이어가 추가되었습니다.");
 
+    }
+    private void StopFlame(string layer)
+    {
+        Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer(layer));
+        Debug.Log($"{layer} 레이어가 제거되었습니다.");
+      
     }
 }

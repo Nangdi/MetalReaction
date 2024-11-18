@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.IO.Ports;
+using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SerialPortManager : MonoBehaviour
@@ -9,11 +12,12 @@ public class SerialPortManager : MonoBehaviour
     [SerializeField]
     private FlameController controller;
     SerialPort serialPort = new SerialPort("COM3", 19200, Parity.None, 8, StopBits.One);
-
-    private string receiveBuffer = "";
+    private Queue<string> dataQueue = new Queue<string>(); // 데이터 큐
+    private bool isRunning = false;
+    private Thread readThread;
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(this);
@@ -27,82 +31,76 @@ public class SerialPortManager : MonoBehaviour
     void Start()
     {
         // 포트 열기
-        if (!serialPort.IsOpen)
+
+        Debug.Log("포트연결시도");
+        serialPort.ReadTimeout = 50;
+        serialPort.Open();
+        if (serialPort.IsOpen)
         {
-            Debug.Log("포트연결중");
-            serialPort.Open();
-            serialPort.ReadTimeout = 1000;
+            isRunning = true;
+            readThread = new Thread(ReadSerialData);
+            readThread.Start();
         }
     }
 
+
+    // 데이터 읽기
     void Update()
     {
-        // 데이터 읽기
-        if (serialPort.IsOpen)
+        if (dataQueue.Count > 0)
+        {
+            string receivedData = dataQueue.Dequeue(); // 큐에서 하나씩 꺼내서 처리
+
+            if (!string.IsNullOrEmpty(receivedData) && receivedData.Length>=3)
+            {
+                Debug.Log("수신된 데이터: " + receivedData);
+                controller.ProcessReceivedData(receivedData);
+            }
+        }
+    }
+    void ReadSerialData()
+    {
+        while (isRunning && serialPort != null && serialPort.IsOpen)
         {
             try
             {
-                
-                string data = serialPort.ReadExisting().Trim(); // 수신된 모든 데이터 읽기
-                if (data.Contains("\n"))
-                {
-                    Debug.Log("줄바꿈포함됨");
-                }
+                // 데이터를 수신
+
+                string data = serialPort.ReadExisting().Trim();
                 if (!string.IsNullOrEmpty(data))
                 {
-                    receiveBuffer += data;
-                    if(receiveBuffer.Length == 3)
+                    // 큐에 수신된 데이터 추가
+                    lock (dataQueue) // 멀티스레드 환경에서 큐를 안전하게 다루기 위해 lock 사용
                     {
-                        Debug.Log("Received: " + receiveBuffer); // 데이터가 있을 경우 로그 출력
-                        controller.ProcessReceivedData(receiveBuffer);
-                        receiveBuffer = "";
+                        dataQueue.Enqueue(data);
                     }
-                  
-                }
-                else
-                {
-                    //Debug.Log("수신된데이터없음");
                 }
             }
             catch (TimeoutException ex)
             {
+                // 데이터가 없을 때는 무시
                 Debug.LogWarning("데이터 수신 시간 초과: " + ex.Message);
             }
-            catch (System.Exception ex)
-            {
-                Debug.LogError("오류 발생: " + ex.Message);
-            }
-        }
-        else
-        {
-            Debug.Log("연결안됌");
         }
     }
-    public void SendData(string message)
-    {
-        if (serialPort.IsOpen)
-        {
-            try
-            {
-                serialPort.WriteLine(message); // 메시지 송신 (줄 바꿈 추가)
-                Debug.Log("Sent: " + message);
-            }
-            catch (System.Exception ex)
-            {
-                Debug.LogError("송신 오류: " + ex.Message);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("포트가 열려 있지 않음 - 송신 실패");
-        }
-    }
+  
 
 
     void OnApplicationQuit()
     {
         // 포트 닫기
-        if (serialPort.IsOpen)
+
+        // 종료 시 쓰레드 정리 및 포트 닫기
+        isRunning = false;
+        if (readThread != null && readThread.IsAlive)
+        {
+            readThread.Join();
+        }
+        if (serialPort != null && serialPort.IsOpen)
+        {
             serialPort.Close();
+        }
+
     }
+
 }

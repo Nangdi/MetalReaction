@@ -33,7 +33,7 @@ public class MovePosManager : MonoBehaviour
         float moveY = Input.GetAxis("Vertical") * speed * Time.deltaTime;
         float moveZ = Input.GetAxis("Mouse ScrollWheel") * speed * Time.deltaTime; 
         // 오브젝트 위치 이동
-        transform.Translate(moveX, moveY, moveZ);
+        transform.Translate(-moveX, -moveY, moveZ);
     }
     public void SaveData()
     {
