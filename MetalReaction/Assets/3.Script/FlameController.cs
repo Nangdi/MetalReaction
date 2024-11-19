@@ -6,7 +6,7 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class MineralInfo
 {
-    public int MeneralId { get; private set; }
+    public int MineralId { get; private set; }
     public string mineralName { get; private set; }
     public string symbol { get; private set; }
 
@@ -14,7 +14,7 @@ public class MineralInfo
 
     public MineralInfo(int num, string name, string _symbor)
     {
-        MeneralId = num;
+        MineralId = num;
         mineralName = name;
         symbol = _symbor;
     }
@@ -27,12 +27,36 @@ public class MineralInfo
 
 public class FlameController : MonoBehaviour
 {
-    private Dictionary<string, MineralInfo> mineralDic;
+  
 
-    private MineralInfo currentMineral;
-   
+    private MineralInfo _currentMineral;
+    public MineralInfo currentMineral
+    {
+        get { return _currentMineral; }
+        private set
+        {
+            if (_currentMineral != value)
+            {
+                //_currentMineral이 null 인 경우 : 불꽃이 안켜져있을때
+                string previousLayer = _currentMineral?.symbol;
+                _currentMineral = value;
+
+                // 이전과 다른 미네랄이면 불꽃을 종료하고 새 미네랄에 대한 불꽃을 시작합니다.
+                if (previousLayer != _currentMineral?.symbol)
+                {
+                    StopFlame(previousLayer);
+                }
+                PlayFlame(_currentMineral.symbol);
+                uiManager.SetActiveUI(_currentMineral.MineralId);
+            }
+        }
+    }
+    [SerializeField]
+    private UIManager uiManager;
+    private Dictionary<string, MineralInfo> mineralDic;
     [SerializeField]
     private VisualEffect[] flames = new VisualEffect[8];
+    
     private void Start()
     {
         InitializeCommandActions();
@@ -72,11 +96,11 @@ public class FlameController : MonoBehaviour
             { "80E", new MineralInfo(4 , "구리", "Cu")  },
             { "80F", new MineralInfo(5 , "스트론튬", "Sr")  },
             { "80G", new MineralInfo(6 , "바륨", "Ba")  },
-            { "80Z" , new MineralInfo(7 , "기본", "")  }
+            { "80Z", new MineralInfo(7 , "기본", "")  }
         };
 
     }
-    
+
     private void AllStopEffect()
     {
         for (int i = 0; i < flames.Length; i++)
@@ -87,33 +111,21 @@ public class FlameController : MonoBehaviour
     public void ProcessReceivedData(string data)
     {
 
-        if (!mineralDic.ContainsKey(data))
+        if (mineralDic.ContainsKey(data))
+        {
+            currentMineral = mineralDic[data];
+            
+        }
+        else
         {
             Debug.Log("키 존재하지않음");
             return;
         }
-        if(currentMineral != null)
-        {
-            //이전 != 현재 
-            if(currentMineral.MeneralId != mineralDic[data].MeneralId)
-            {
-                //기존 켜져있던 불꽃 제거
-                string _previousLayer = currentMineral.symbol;
-                StopFlame(_previousLayer);
-            }
-            else
-            {
-                //이전과같은 불꽃일시 리턴
-                return;
-            }
-        }
+      
        //현재광물 업데이트
-        currentMineral = mineralDic[data];
-        string _targetLayer = currentMineral.symbol;
-        PlayFlame(_targetLayer);
-       
-        Debug.Log(currentMineral.mineralName);
+      
     }
+    
     private void PlayFlame(string layer)
     {
         Camera.main.cullingMask |= (1 << LayerMask.NameToLayer(layer));
