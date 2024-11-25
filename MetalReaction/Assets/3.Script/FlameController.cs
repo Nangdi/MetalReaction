@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
-using static UnityEditor.Experimental.GraphView.GraphView;
+//using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class MineralInfo
 {
@@ -12,16 +12,16 @@ public class MineralInfo
 
     public string offCode { get; private set; }
 
+
+
+
+
     public MineralInfo(int num, string name, string _symbor)
     {
         MineralId = num;
         mineralName = name;
         symbol = _symbor;
     }
-
-
-
-
 }
 
 
@@ -129,13 +129,13 @@ public class FlameController : MonoBehaviour
     private void PlayFlame(string layer)
     {
         Camera.main.cullingMask |= (1 << LayerMask.NameToLayer(layer));
-        Debug.Log($"{layer} 레이어가 추가되었습니다.");
+        //Debug.Log($"{layer} 레이어가 추가되었습니다.");
 
     }
     private void StopFlame(string layer)
     {
         Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer(layer));
-        Debug.Log($"{layer} 레이어가 제거되었습니다.");
+        //Debug.Log($"{layer} 레이어가 제거되었습니다.");
       
     }
 }

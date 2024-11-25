@@ -12,7 +12,7 @@ public class SerialPortManager : MonoBehaviour
 
     [SerializeField]
     private FlameController controller;
-    SerialPort serialPort = new SerialPort("COM3", 19200, Parity.None, 8, StopBits.One);
+    SerialPort serialPort = new SerialPort("COM7", 19200, Parity.None, 8, StopBits.One);
     private CancellationTokenSource cancellationTokenSource; // CancellationTokenSource Ãß°¡
     private void Awake()
     {
