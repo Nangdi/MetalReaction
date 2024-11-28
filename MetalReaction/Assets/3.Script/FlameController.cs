@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using static UnityEngine.Rendering.DebugUI;
 //using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class MineralInfo
@@ -33,23 +35,23 @@ public class FlameController : MonoBehaviour
     public MineralInfo currentMineral
     {
         get { return _currentMineral; }
-        private set
-        {
-            if (_currentMineral != value)
-            {
-                //_currentMineral이 null 인 경우 : 불꽃이 안켜져있을때
-                string previousLayer = _currentMineral?.symbol;
-                _currentMineral = value;
+        //private set
+        //{
+        //    if (_currentMineral != value)
+        //    {
+        //        //_currentMineral이 null 인 경우 : 불꽃이 안켜져있을때
+        //        string previousLayer = _currentMineral?.symbol;
+        //        _currentMineral = value;
 
-                // 이전과 다른 미네랄이면 불꽃을 종료하고 새 미네랄에 대한 불꽃을 시작합니다.
-                if (previousLayer != _currentMineral?.symbol)
-                {
-                    StopFlame(previousLayer);
-                }
-                PlayFlame(_currentMineral.symbol);
-                uiManager.SetActiveUI(_currentMineral.MineralId);
-            }
-        }
+        //        // 이전과 다른 미네랄이면 불꽃을 종료하고 새 미네랄에 대한 불꽃을 시작합니다.
+        //        if (previousLayer != _currentMineral?.symbol)
+        //        {
+        //            StopFlame(previousLayer);
+        //        }
+        //        PlayFlame(_currentMineral.symbol);
+        //        uiManager.SetActiveUI(_currentMineral.MineralId);
+        //    }
+        //}
     }
     [SerializeField]
     private UIManager uiManager;
@@ -58,9 +60,10 @@ public class FlameController : MonoBehaviour
     private Transform flame;
     [SerializeField]
     private Transform[] flamePos;
+    public Transform targetPos;
     [SerializeField]
     private VisualEffect[] flames = new VisualEffect[8];
-    
+    private int posData;
     private void Start()
     {
         InitializeCommandActions();
@@ -114,11 +117,19 @@ public class FlameController : MonoBehaviour
     }
     public void ProcessReceivedData(string data)
     {
-        Debug.Log(data);
-        if (mineralDic.ContainsKey(data[1]))
+        if (mineralDic.ContainsKey(data[3]))
         {
-            currentMineral = mineralDic[data[1]];
-            
+            int index = int.Parse(data[2].ToString())-1 ;
+            ChangeFlameData(mineralDic[data[3]], index);
+            //currentMineral = mineralDic[data[3]];
+            if (targetPos != flamePos[index])
+            {
+                targetPos = flamePos[index];
+
+            }
+            posData = index;
+
+
         }
         else
         {
@@ -130,11 +141,17 @@ public class FlameController : MonoBehaviour
       
     }
     
-    private void PlayFlame(string layer)
+    private void PlayFlame(string layer, int posIndex)
     {
+        if (targetPos != flamePos[posIndex])
+        {
+            targetPos = flamePos[posIndex];
+
+        }
+        MoveImmediately(posIndex);
         Camera.main.cullingMask |= (1 << LayerMask.NameToLayer(layer));
         //Debug.Log($"{layer} 레이어가 추가되었습니다.");
-
+        //MoveImmediately(posData);
     }
     private void StopFlame(string layer)
     {
@@ -145,5 +162,22 @@ public class FlameController : MonoBehaviour
     private void MoveImmediately(int index)
     {
         flame.position = flamePos[index].position;
+    }
+    private void ChangeFlameData(MineralInfo info, int posData)
+    {
+        if (_currentMineral != info)
+        {
+            //_currentMineral이 null 인 경우 : 불꽃이 안켜져있을때
+            string previousLayer = _currentMineral?.symbol;
+            _currentMineral = info;
+
+            // 이전과 다른 미네랄이면 불꽃을 종료하고 새 미네랄에 대한 불꽃을 시작합니다.
+            if (previousLayer != _currentMineral?.symbol)
+            {
+                StopFlame(previousLayer);
+            }
+            PlayFlame(_currentMineral.symbol, posData);
+            uiManager.SetActiveUI(_currentMineral.MineralId);
+        }
     }
 }
