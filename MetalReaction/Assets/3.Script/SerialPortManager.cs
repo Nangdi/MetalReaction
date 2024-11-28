@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Windows;
 
 public class SerialPortManager : MonoBehaviour
 {
@@ -57,7 +58,9 @@ public class SerialPortManager : MonoBehaviour
             {
                 // 데이터를 수신
 
-                string data = await Task.Run(() => ReadSerialData() , token);
+                string input = await Task.Run(() => ReadSerialData() , token);
+                string data = GetData(input);
+
                 if (!string.IsNullOrEmpty(data) && data.Length >= 3)
                 {
                     Debug.Log("받은데이터 : " + data);
@@ -76,14 +79,31 @@ public class SerialPortManager : MonoBehaviour
     {
         try
         {
-            return serialPort.ReadExisting().Trim(); // 데이터 읽기
+           
+            string input = serialPort.ReadExisting().Trim(); // 데이터 읽기
+            return GetData(input);
+            //return serialPort.ReadLine(); // 데이터 읽기
         }
         catch (TimeoutException)
         {
             return null; // 시간 초과 시 null 반환
         }
     }
-
+    private string GetData(string input)
+    {
+        //input 데이터가 80이포함되면 80과 그다음문자에 해당하는 문자열 만큼 반환.
+        if (input.Contains("80"))
+        {
+            int index = input.IndexOf("80");
+            if(index+2 < input.Length)
+            {
+            // "80" 다음 문자까지 포함하여 자르기    
+            //Debug.Log(data.Substring(index, 3));
+            return input.Substring(index  ,3);
+            }
+        }
+        return "";
+    }
 
     void OnApplicationQuit()
     {
@@ -93,6 +113,7 @@ public class SerialPortManager : MonoBehaviour
 
         if (cancellationTokenSource != null)
         {
+            Debug.Log("Task 종료");
             cancellationTokenSource.Cancel(); // 작업 취소
         }
         if (serialPort != null && serialPort.IsOpen)

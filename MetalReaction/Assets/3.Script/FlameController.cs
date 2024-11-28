@@ -110,7 +110,7 @@ public class FlameController : MonoBehaviour
     }
     public void ProcessReceivedData(string data)
     {
-
+        //data = data.Substring(0, 3);
         if (mineralDic.ContainsKey(data))
         {
             currentMineral = mineralDic[data];
