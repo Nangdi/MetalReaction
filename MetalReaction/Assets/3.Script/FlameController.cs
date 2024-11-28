@@ -53,7 +53,11 @@ public class FlameController : MonoBehaviour
     }
     [SerializeField]
     private UIManager uiManager;
-    private Dictionary<string, MineralInfo> mineralDic;
+    private Dictionary<char, MineralInfo> mineralDic;
+    [SerializeField]
+    private Transform flame;
+    [SerializeField]
+    private Transform[] flamePos;
     [SerializeField]
     private VisualEffect[] flames = new VisualEffect[8];
     
@@ -74,29 +78,29 @@ public class FlameController : MonoBehaviour
     //Å°º¸µå Å×½ºÆ®¿ë
     string GetPressedKey()
     {
-        if (Input.GetKey(KeyCode.Alpha1)) return "80A";
-        if (Input.GetKey(KeyCode.Alpha2)) return "80C";
-        if (Input.GetKey(KeyCode.Alpha3)) return "80D";
-        if (Input.GetKey(KeyCode.Alpha4)) return "80E";
-        if (Input.GetKey(KeyCode.Alpha5)) return "80F";
-        if (Input.GetKey(KeyCode.Alpha6)) return "80G";
-        if (Input.GetKey(KeyCode.Alpha7)) return "80H";
-        if (Input.GetKey(KeyCode.Alpha8)) return "80B";
+        if (Input.GetKey(KeyCode.Alpha1)) return "3A";
+        if (Input.GetKey(KeyCode.Alpha2)) return "3C";
+        if (Input.GetKey(KeyCode.Alpha3)) return "3D";
+        if (Input.GetKey(KeyCode.Alpha4)) return "3E";
+        if (Input.GetKey(KeyCode.Alpha5)) return "3F";
+        if (Input.GetKey(KeyCode.Alpha6)) return "3G";
+        if (Input.GetKey(KeyCode.Alpha7)) return "3H";
+        if (Input.GetKey(KeyCode.Alpha8)) return "3B";
         return ""; // ¾Æ¹« Å°µµ ´­¸®Áö ¾Ê¾ÒÀ»7¶§ ¹ÝÈ¯ÇÒ ±âº» °ª
     }
     //¹Ù·ýÀÇ Flames ¹è¿­°ú MineralInfoÀÇ ID°¡ ¸Ç³¡À¸·Î °¡¾ßÇÔ
     private void InitializeCommandActions()
     {
-        mineralDic = new Dictionary<string, MineralInfo>
+        mineralDic = new Dictionary<char, MineralInfo>
        {
-            { "80A", new MineralInfo(0 , "¸®Æ¬" , "Li" ) },
-            { "80B", new MineralInfo(1 , "³ªÆ®·ý", "Na")  },
-            { "80C", new MineralInfo(2 , "Ä®·ý", "K" ) },
-            { "80D", new MineralInfo(3 , "Ä®½·", "Ca")  },
-            { "80E", new MineralInfo(4 , "±¸¸®", "Cu")  },
-            { "80F", new MineralInfo(5 , "½ºÆ®·ÐÆ¬", "Sr")  },
-            { "80G", new MineralInfo(6 , "¹Ù·ý", "Ba")  },
-            { "80Z", new MineralInfo(7 , "±âº»", "")  }
+            { 'A', new MineralInfo(0 , "¸®Æ¬" , "Li" ) },
+            { 'B', new MineralInfo(1 , "³ªÆ®·ý", "Na")  },
+            { 'C', new MineralInfo(2 , "Ä®·ý", "K" ) },
+            { 'D', new MineralInfo(3 , "Ä®½·", "Ca")  },
+            { 'E', new MineralInfo(4 , "±¸¸®", "Cu")  },
+            { 'F', new MineralInfo(5 , "½ºÆ®·ÐÆ¬", "Sr")  },
+            { 'G', new MineralInfo(6 , "¹Ù·ý", "Ba")  },
+            { 'Z', new MineralInfo(7 , "±âº»", "")  }
         };
 
     }
@@ -110,10 +114,10 @@ public class FlameController : MonoBehaviour
     }
     public void ProcessReceivedData(string data)
     {
-        //data = data.Substring(0, 3);
-        if (mineralDic.ContainsKey(data))
+        Debug.Log(data);
+        if (mineralDic.ContainsKey(data[1]))
         {
-            currentMineral = mineralDic[data];
+            currentMineral = mineralDic[data[1]];
             
         }
         else
@@ -137,5 +141,9 @@ public class FlameController : MonoBehaviour
         Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer(layer));
         //Debug.Log($"{layer} ·¹ÀÌ¾î°¡ Á¦°ÅµÇ¾ú½À´Ï´Ù.");
       
+    }
+    private void MoveImmediately(int index)
+    {
+        flame.position = flamePos[index].position;
     }
 }

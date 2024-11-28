@@ -95,11 +95,12 @@ public class SerialPortManager : MonoBehaviour
         if (input.Contains("80"))
         {
             int index = input.IndexOf("80");
-            if(index+2 < input.Length)
+            int trimmedDataLanght = 4;
+            if (trimmedDataLanght -1 < input.Length)
             {
             // "80" 다음 문자까지 포함하여 자르기    
             //Debug.Log(data.Substring(index, 3));
-            return input.Substring(index  ,3);
+            return input.Substring(index+2  , trimmedDataLanght);
             }
         }
         return "";
