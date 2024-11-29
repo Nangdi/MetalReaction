@@ -1,39 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
+using UnityEngine;
+
 [System.Serializable]
 public class JsonData
 {
     public Vector3 flamePos;
+    public float spacing= 0.5f;
 }
-public class MovePosManager : MonoBehaviour
+public class FlameDataManager : MonoBehaviour
 {
+   public static FlameDataManager Instance;
+    [SerializeField]
+    FlameMovement flameMovement;
+    [SerializeField]
+    ReactionFlameMovement reactionFlameMovement;
 
-    public float speed = 5.0f;  // 이동 속도
+
     private string filePath;
     public JsonData data;
-    private void Awake
-        ()
+    private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
         filePath = Path.Combine(Application.persistentDataPath, "gameData.json");
         LoadData();
-       
-    }
-    private void Start()
-    {
-        transform.position = data.flamePos;
-    }
 
-
-    void Update()
-    {
-        // 키 입력에 따라 x, y 방향 이동량 계산
-        float moveX = Input.GetAxis("Horizontal") * speed * Time.deltaTime;
-        float moveY = Input.GetAxis("Vertical") * speed * Time.deltaTime;
-        float moveZ = Input.GetAxis("Mouse ScrollWheel") * speed * Time.deltaTime; 
-        // 오브젝트 위치 이동
-        transform.Translate(-moveX, -moveY, moveZ);
     }
     public void SaveData()
     {
@@ -51,7 +46,8 @@ public class MovePosManager : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        data.flamePos = transform.position;
+        data.flamePos = flameMovement.transform.position;
+        data.spacing = reactionFlameMovement.spacing;
         SaveData();
     }
 }
