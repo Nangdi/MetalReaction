@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
-using static UnityEngine.Rendering.DebugUI;
-//using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class MineralInfo
 {
@@ -66,6 +64,7 @@ public class FlameController : MonoBehaviour
     private int posData;
     private void Start()
     {
+        StartCoroutine(WaitCameraMaskSetting());
         InitializeCommandActions();
         //AllStopEffect();
     }
@@ -179,5 +178,13 @@ public class FlameController : MonoBehaviour
             PlayFlame(_currentMineral.symbol, posData);
             uiManager.SetActiveUI(_currentMineral.MineralId);
         }
+    }
+    private IEnumerator WaitCameraMaskSetting()
+    {
+
+        Camera.main.cullingMask = -1;
+        yield return new WaitForSeconds(1.5f);
+        Camera.main.cullingMask = 0;
+        Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("Default"));
     }
 }

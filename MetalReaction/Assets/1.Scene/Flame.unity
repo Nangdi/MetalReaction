@@ -1089,11 +1089,11 @@ MonoBehaviour:
   uiManager: {fileID: 1853647149}
   flame: {fileID: 1028276028}
   flamePos:
-  - {fileID: 1613119238}
-  - {fileID: 920155359}
-  - {fileID: 1585047873}
-  - {fileID: 939872186}
   - {fileID: 1279479142}
+  - {fileID: 939872186}
+  - {fileID: 1585047873}
+  - {fileID: 920155359}
+  - {fileID: 1613119238}
   targetPos: {fileID: 0}
   flames:
   - {fileID: 2123106578}

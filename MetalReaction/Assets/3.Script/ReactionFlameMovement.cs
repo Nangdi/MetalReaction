@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class ReactionFlameMovement : MonoBehaviour
 {
@@ -56,7 +55,8 @@ public class ReactionFlameMovement : MonoBehaviour
             {
                 Debug.Log("오브젝트이동중");
                 //transform.Translate(targetPos.position * speed * Time.deltaTime);
-                transform.position = Vector3.MoveTowards(transform.position, flameController.targetPos.position, speed * Time.deltaTime);
+                //transform.position = Vector3.MoveTowards(transform.position, flameController.targetPos.position, speed * Time.deltaTime);
+                transform.position = Vector3.Lerp(transform.position, flameController.targetPos.position, speed * Time.deltaTime);
             }
         }
     }
