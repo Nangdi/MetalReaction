@@ -19,18 +19,29 @@ public class ReactionFlameMovement : MonoBehaviour
     private GameObject guideText2;
     [Header("불꽃 이동속도")]
     public float speed = 100;
+    public float setSpeed = 5;
     void Start()
     {
         targetPos = flameController.targetPos;
         spacing= FlameDataManager.Instance.data.spacing;
+        transform.localPosition = FlameDataManager.Instance.data.reactionFlamePos;
         ArrangeObject();
     }
 
     // Update is called once per frame
     void Update()
     {
-        SetSpacing();
-        MoveTargetPos();
+
+        if (isSpacingSetting)
+        {
+            SetPostion();
+            SetSpacing();
+        }
+        else
+        {
+            MoveTargetPos();
+
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isSpacingSetting = !isSpacingSetting;
@@ -62,14 +73,23 @@ public class ReactionFlameMovement : MonoBehaviour
     }
     private void SetSpacing()
     {
-        if (isSpacingSetting)
-        {
-            spacing += Input.GetAxis("Mouse ScrollWheel") * 5 * Time.deltaTime;
-            //spacing = Mathf.Clamp01(spacing);
-            ArrangeObject();
-        }
+
+        spacing += Input.GetAxis("Mouse ScrollWheel") * 5 * Time.deltaTime;
+        //spacing = Mathf.Clamp01(spacing);
+        ArrangeObject();
+        
 
 
+
+    }
+    private void SetPostion()
+    {
+        // 키 입력에 따라 x, y 방향 이동량 계산
+        float moveX = Input.GetAxis("Horizontal") * setSpeed * Time.deltaTime;
+        float moveY = Input.GetAxis("Vertical") * setSpeed * Time.deltaTime;
+        float moveZ = Input.GetAxis("Mouse ScrollWheel") * setSpeed * Time.deltaTime;
+        // 오브젝트 위치 이동
+        transform.Translate(moveX, -moveY, moveZ);
     }
     private void ArrangeObject()
     {

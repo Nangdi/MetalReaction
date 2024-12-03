@@ -7,6 +7,7 @@ using UnityEngine;
 public class JsonData
 {
     public Vector3 flamePos;
+    public Vector3 reactionFlamePos;
     public float spacing= 0.5f;
 }
 public class FlameDataManager : MonoBehaviour
@@ -48,6 +49,7 @@ public class FlameDataManager : MonoBehaviour
     {
         data.flamePos = flameMovement.transform.position;
         data.spacing = reactionFlameMovement.spacing;
+        data.reactionFlamePos = reactionFlameMovement.transform.transform.localPosition ;
         SaveData();
     }
 }

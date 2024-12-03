@@ -80,14 +80,14 @@ public class FlameController : MonoBehaviour
     //키보드 테스트용
     string GetPressedKey()
     {
-        if (Input.GetKey(KeyCode.Alpha1)) return "3A";
-        if (Input.GetKey(KeyCode.Alpha2)) return "3C";
-        if (Input.GetKey(KeyCode.Alpha3)) return "3D";
-        if (Input.GetKey(KeyCode.Alpha4)) return "3E";
-        if (Input.GetKey(KeyCode.Alpha5)) return "3F";
-        if (Input.GetKey(KeyCode.Alpha6)) return "3G";
-        if (Input.GetKey(KeyCode.Alpha7)) return "3H";
-        if (Input.GetKey(KeyCode.Alpha8)) return "3B";
+        if (Input.GetKey(KeyCode.Alpha1)) return "803A";
+        if (Input.GetKey(KeyCode.Alpha2)) return "803B";
+        if (Input.GetKey(KeyCode.Alpha3)) return "803C";
+        if (Input.GetKey(KeyCode.Alpha4)) return "803D";
+        if (Input.GetKey(KeyCode.Alpha5)) return "803E";
+        if (Input.GetKey(KeyCode.Alpha6)) return "803F";
+        if (Input.GetKey(KeyCode.Alpha7)) return "803G";
+        if (Input.GetKey(KeyCode.Alpha8)) return "803Z";
         return ""; // 아무 키도 눌리지 않았을7때 반환할 기본 값
     }
     //바륨의 Flames 배열과 MineralInfo의 ID가 맨끝으로 가야함
@@ -104,7 +104,6 @@ public class FlameController : MonoBehaviour
             { 'G', new MineralInfo(6 , "바륨", "Ba")  },
             { 'Z', new MineralInfo(7 , "기본", "")  }
         };
-
     }
 
     private void AllStopEffect()
