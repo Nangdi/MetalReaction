@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIActiveManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject[] ui;

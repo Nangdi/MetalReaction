@@ -20,7 +20,7 @@ public class FlameDataManager : MonoBehaviour
 
 
     private string filePath;
-    public JsonData data;
+    public JsonData jsondata;
     private void Awake()
     {
         if (Instance == null)
@@ -29,11 +29,12 @@ public class FlameDataManager : MonoBehaviour
         }
         filePath = Path.Combine(Application.persistentDataPath, "gameData.json");
         LoadData();
+        InvisbleMouseCursor();
 
     }
     public void SaveData()
     {
-        string json = JsonUtility.ToJson(data);
+        string json = JsonUtility.ToJson(jsondata);
         File.WriteAllText(filePath, json);
     }
 
@@ -42,14 +43,19 @@ public class FlameDataManager : MonoBehaviour
         if (File.Exists(filePath))
         {
             string json = File.ReadAllText(filePath);
-            JsonUtility.FromJsonOverwrite(json, data);
+            JsonUtility.FromJsonOverwrite(json, jsondata);
         }
     }
     private void OnApplicationQuit()
     {
-        data.flamePos = flameMovement.transform.position;
-        data.spacing = reactionFlameMovement.spacing;
-        data.reactionFlamePos = reactionFlameMovement.transform.transform.localPosition ;
+        jsondata.flamePos = flameMovement.transform.position;
+        jsondata.spacing = reactionFlameMovement.spacing;
+        jsondata.reactionFlamePos = reactionFlameMovement.transform.transform.localPosition ;
         SaveData();
+    }
+    private void InvisbleMouseCursor()
+    {
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

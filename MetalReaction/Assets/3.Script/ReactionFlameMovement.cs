@@ -23,8 +23,7 @@ public class ReactionFlameMovement : MonoBehaviour
     void Start()
     {
         targetPos = flameController.targetPos;
-        spacing= FlameDataManager.Instance.data.spacing;
-        transform.localPosition = FlameDataManager.Instance.data.reactionFlamePos;
+        JsonDataInit();
         ArrangeObject();
     }
 
@@ -48,11 +47,11 @@ public class ReactionFlameMovement : MonoBehaviour
             guideText2.SetActive(isSpacingSetting);
             if (isSpacingSetting)
             {
-                Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("quad"));
+                Camera.main.cullingMask |= (1 << LayerMask.NameToLayer("SpacingObject"));
             }
             else
             {
-                Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("quad"));
+                Camera.main.cullingMask &= ~(1 << LayerMask.NameToLayer("SpacingObject"));
             }
 
         }
@@ -64,9 +63,6 @@ public class ReactionFlameMovement : MonoBehaviour
             float distance = Vector3.Distance(flameController.targetPos.position, transform.position);
             if (distance > 0.0001f)
             {
-                Debug.Log("오브젝트이동중");
-                //transform.Translate(targetPos.position * speed * Time.deltaTime);
-                //transform.position = Vector3.MoveTowards(transform.position, flameController.targetPos.position, speed * Time.deltaTime);
                 transform.position = Vector3.Lerp(transform.position, flameController.targetPos.position, speed * Time.deltaTime);
             }
         }
@@ -75,7 +71,6 @@ public class ReactionFlameMovement : MonoBehaviour
     {
 
         spacing += Input.GetAxis("Mouse ScrollWheel") * 5 * Time.deltaTime;
-        //spacing = Mathf.Clamp01(spacing);
         ArrangeObject();
         
 
@@ -91,8 +86,11 @@ public class ReactionFlameMovement : MonoBehaviour
         // 오브젝트 위치 이동
         transform.Translate(moveX, -moveY, moveZ);
     }
+    
     private void ArrangeObject()
     {
+        //flameObjects의 중앙ob를 기준으로 spaceing(간격)만큼 거리 벌려주는코드
+
         int midIndex = flameObjects.Length / 2;
 
         for (int i = 0; i < flameObjects.Length; i++)
@@ -102,8 +100,13 @@ public class ReactionFlameMovement : MonoBehaviour
         }
 
     }
+    private void JsonDataInit()
+    {
+        spacing = FlameDataManager.Instance.jsondata.spacing;
+        transform.localPosition = FlameDataManager.Instance.jsondata.reactionFlamePos;
+    }
     private void OnDestroy()
     {
-        FlameDataManager.Instance.data.spacing = spacing;
+        FlameDataManager.Instance.jsondata.spacing = spacing;
     }
 }

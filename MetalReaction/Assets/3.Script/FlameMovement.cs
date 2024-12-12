@@ -14,7 +14,7 @@ public class FlameMovement : MonoBehaviour
  
     private void Start()
     {
-        transform.position =FlameDataManager.Instance.data.flamePos;
+        transform.position =FlameDataManager.Instance.jsondata.flamePos;
     }
 
 
@@ -43,7 +43,7 @@ public class FlameMovement : MonoBehaviour
     }
     private void OnDisable()
     {
-        FlameDataManager.Instance.data.flamePos = transform.position;
+        FlameDataManager.Instance.jsondata.flamePos = transform.position;
     }
 
 }

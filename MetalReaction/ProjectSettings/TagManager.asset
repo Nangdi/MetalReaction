@@ -8,7 +8,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - quad
+  - SpacingObject
   - Water
   - UI
   - Li

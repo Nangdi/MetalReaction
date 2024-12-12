@@ -33,35 +33,17 @@ public class FlameController : MonoBehaviour
     public MineralInfo currentMineral
     {
         get { return _currentMineral; }
-        //private set
-        //{
-        //    if (_currentMineral != value)
-        //    {
-        //        //_currentMineral이 null 인 경우 : 불꽃이 안켜져있을때
-        //        string previousLayer = _currentMineral?.symbol;
-        //        _currentMineral = value;
-
-        //        // 이전과 다른 미네랄이면 불꽃을 종료하고 새 미네랄에 대한 불꽃을 시작합니다.
-        //        if (previousLayer != _currentMineral?.symbol)
-        //        {
-        //            StopFlame(previousLayer);
-        //        }
-        //        PlayFlame(_currentMineral.symbol);
-        //        uiManager.SetActiveUI(_currentMineral.MineralId);
-        //    }
-        //}
     }
-    [SerializeField]
-    private UIManager uiManager;
     private Dictionary<char, MineralInfo> mineralDic;
     [SerializeField]
-    private Transform flame;
+    private UIActiveManager uiManager;
     [SerializeField]
-    private Transform[] flamePos;
+    private Transform reactionFlameParents;
+    [SerializeField]
+    private Transform[] flameSpacing;
     public Transform targetPos;
     [SerializeField]
-    private VisualEffect[] flames = new VisualEffect[8];
-    private int posData;
+    private int spacingIndex;
     private void Start()
     {
         StartCoroutine(WaitCameraMaskSetting());
@@ -106,13 +88,6 @@ public class FlameController : MonoBehaviour
         };
     }
 
-    private void AllStopEffect()
-    {
-        for (int i = 0; i < flames.Length; i++)
-        {
-            flames[i].Stop();
-        }
-    }
     public void ProcessReceivedData(string data)
     {
         if (mineralDic.ContainsKey(data[3]))
@@ -120,12 +95,12 @@ public class FlameController : MonoBehaviour
             int index = int.Parse(data[2].ToString())-1 ;
             ChangeFlameData(mineralDic[data[3]], index);
             //currentMineral = mineralDic[data[3]];
-            if (targetPos != flamePos[index])
+            if (targetPos != flameSpacing[index])
             {
-                targetPos = flamePos[index];
+                targetPos = flameSpacing[index];
 
             }
-            posData = index;
+            spacingIndex = index;
 
 
         }
@@ -141,15 +116,14 @@ public class FlameController : MonoBehaviour
     
     private void PlayFlame(string layer, int posIndex)
     {
-        if (targetPos != flamePos[posIndex])
+        if (targetPos != flameSpacing[posIndex])
         {
-            targetPos = flamePos[posIndex];
+            targetPos = flameSpacing[posIndex];
 
         }
         MoveImmediately(posIndex);
         Camera.main.cullingMask |= (1 << LayerMask.NameToLayer(layer));
         //Debug.Log($"{layer} 레이어가 추가되었습니다.");
-        //MoveImmediately(posData);
     }
     private void StopFlame(string layer)
     {
@@ -159,7 +133,7 @@ public class FlameController : MonoBehaviour
     }
     private void MoveImmediately(int index)
     {
-        flame.position = flamePos[index].position;
+        reactionFlameParents.position = flameSpacing[index].position;
     }
     private void ChangeFlameData(MineralInfo info, int posData)
     {
