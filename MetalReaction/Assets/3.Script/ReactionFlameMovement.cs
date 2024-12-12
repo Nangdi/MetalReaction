@@ -82,9 +82,8 @@ public class ReactionFlameMovement : MonoBehaviour
         // 키 입력에 따라 x, y 방향 이동량 계산
         float moveX = Input.GetAxis("Horizontal") * setSpeed * Time.deltaTime;
         float moveY = Input.GetAxis("Vertical") * setSpeed * Time.deltaTime;
-        float moveZ = Input.GetAxis("Mouse ScrollWheel") * setSpeed * Time.deltaTime;
         // 오브젝트 위치 이동
-        transform.Translate(moveX, -moveY, moveZ);
+        transform.Translate(moveX, -moveY, 0);
     }
     
     private void ArrangeObject()
