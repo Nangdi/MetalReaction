@@ -16,7 +16,7 @@ public class UIFade : MonoBehaviour
     private void OnEnable()
     {
         ui.DOFade(0, 0);
-        ui.DOFade(1, 1);
+        ui.DOFade(1, 3);
     }
     // Update is called once per frame
     void Update()
