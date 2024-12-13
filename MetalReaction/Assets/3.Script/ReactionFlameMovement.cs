@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class ReactionFlameMovement : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class ReactionFlameMovement : MonoBehaviour
     private FlameController flameController;
     [Header("불꽃 움직일수 있는 간격변수")]
     [SerializeField]
-    private GameObject[] flameObjects;
+    private GameObject[] spacingObjects;
     public float spacing =0.5f;
 
     private Transform targetPos;
@@ -85,6 +86,7 @@ public class ReactionFlameMovement : MonoBehaviour
         float moveX = Input.GetAxis("Horizontal") * setSpeed * Time.deltaTime;
         float moveY = Input.GetAxis("Vertical") * setSpeed * Time.deltaTime;
         // 오브젝트 위치 이동
+        spacingObjects[0].transform.parent.Translate(moveX, -moveY, 0);
         transform.Translate(moveX, -moveY, 0);
     }
     
@@ -92,12 +94,12 @@ public class ReactionFlameMovement : MonoBehaviour
     {
         //flameObjects의 중앙ob를 기준으로 spaceing(간격)만큼 거리 벌려주는코드
 
-        int midIndex = flameObjects.Length / 2;
+        int midIndex = spacingObjects.Length / 2;
 
-        for (int i = 0; i < flameObjects.Length; i++)
+        for (int i = 0; i < spacingObjects.Length; i++)
         {
             float offset = (i - midIndex) * spacing;
-            flameObjects[i].transform.localPosition = new Vector3(offset, 0, 0);
+            spacingObjects[i].transform.localPosition = new Vector3(offset, 0, 0);
         }
 
     }
@@ -105,6 +107,7 @@ public class ReactionFlameMovement : MonoBehaviour
     {
         spacing = FlameDataManager.Instance.jsondata.spacing;
         transform.localPosition = FlameDataManager.Instance.jsondata.reactionFlamePos;
+        spacingObjects[0].transform.parent.localPosition = new Vector3(0,transform.localPosition.y, 0);
     }
     private void OnDestroy()
     {
