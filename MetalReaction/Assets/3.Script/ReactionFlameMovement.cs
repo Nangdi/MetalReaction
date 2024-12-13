@@ -38,9 +38,10 @@ public class ReactionFlameMovement : MonoBehaviour
         }
         else
         {
-            MoveTargetPos();
+           
 
         }
+        MoveTargetPos();
         if (Input.GetKeyDown(KeyCode.Space))
         {
             isSpacingSetting = !isSpacingSetting;
@@ -58,6 +59,7 @@ public class ReactionFlameMovement : MonoBehaviour
     }
     private void MoveTargetPos()
     {
+        Debug.Log("¿Ãµø");
         if (flameController.targetPos != null)
         {
             float distance = Vector3.Distance(flameController.targetPos.position, transform.position);

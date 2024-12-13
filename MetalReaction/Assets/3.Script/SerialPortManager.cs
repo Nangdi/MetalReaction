@@ -33,7 +33,7 @@ public class SerialPortManager : MonoBehaviour
         // 포트 열기
 
         Debug.Log("포트연결시도");
-        serialPort.ReadTimeout = 50;
+        //serialPort.ReadTimeout = 500;
         serialPort.Open();
         if (serialPort.IsOpen)
         {
@@ -81,6 +81,7 @@ public class SerialPortManager : MonoBehaviour
         {
            
             string input = serialPort.ReadExisting().Trim(); // 데이터 읽기
+            Debug.Log(input);
             return GetData(input);
             //return serialPort.ReadLine(); // 데이터 읽기
         }
@@ -92,7 +93,11 @@ public class SerialPortManager : MonoBehaviour
     private string GetData(string input)
     {
         //input 데이터가 80이포함되면 80과 그다음문자에 해당하는 문자열 만큼 반환.
-        if (input.Contains("80"))
+        if (input == null)
+        {
+            return null;
+        }
+        if (input.Contains("80"))   
         {
             int index = input.IndexOf("80");
             if (index + 3 < input.Length)
