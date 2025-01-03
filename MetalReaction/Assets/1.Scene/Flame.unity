@@ -2030,7 +2030,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 4097
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4074,11 +4074,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3863016212730197731, guid: da5327b0ffd9bb849b596274a49961c3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3863016212730197732, guid: da5327b0ffd9bb849b596274a49961c3, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3863016212730197733, guid: da5327b0ffd9bb849b596274a49961c3, type: 3}
       propertyPath: m_ResetSeedOnPlay
@@ -4514,15 +4514,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.x
-      value: 4.2543344
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.y
-      value: 4.289978
+      value: 0.892645
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Value.z
-      value: 2.4485252
+      value: 1.2627451
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Overridden
@@ -4534,7 +4534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Vector4f.m_Array.Array.data[0].m_Overridden
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.atime1
@@ -4582,7 +4582,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.atime1
-      value: 32768
+      value: 32575
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.atime2
@@ -4598,7 +4598,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.ctime2
-      value: 65342
+      value: 65535
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key0.a
@@ -4606,19 +4606,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key0.b
-      value: 0.043137226
+      value: 0.08873496
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key0.g
-      value: 0.98039216
+      value: 1.2256517
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key0.r
-      value: 0.09233027
+      value: 0.26768488
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key1.a
-      value: 0.47058824
+      value: 0.29411766
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key1.b
@@ -4634,15 +4634,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key2.b
-      value: 0
+      value: 0.043137226
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key2.g
-      value: 0.0670706
+      value: 0.98039216
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[1].m_Value.key2.r
-      value: 1
+      value: 0.46940112
       objectReference: {fileID: 0}
     - target: {fileID: 3020340873426311693, guid: f9f427581002e61479c2cfcd335a0b4b, type: 3}
       propertyPath: m_PropertySheet.m_Gradient.m_Array.Array.data[0].m_Value.m_ColorSpace
