@@ -109,6 +109,26 @@ public class SerialPortManager : MonoBehaviour
         }
         return "";
     }
+    //현재프로젝트에선 사용안함
+    public void SendData(string message)
+    {
+        if (serialPort.IsOpen)
+        {
+            try
+            {
+                serialPort.WriteLine(message); // 메시지 송신 (줄 바꿈 추가)
+                Debug.Log("Sent: " + message);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError("송신 오류: " + ex.Message);
+            }
+        }
+        else
+        {
+            Debug.LogWarning("포트가 열려 있지 않음 - 송신 실패");
+        }
+    }
 
     void OnApplicationQuit()
     {
