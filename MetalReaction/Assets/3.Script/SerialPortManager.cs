@@ -147,5 +147,12 @@ public class SerialPortManager : MonoBehaviour
         }
 
     }
+    protected virtual void ReceivedData(string data)
+    { 
+        //상속하고 받은데이터로 프로젝트에 맞는 기능 구현
+
+    }
+
+        
 
 }
